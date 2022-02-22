@@ -1,10 +1,12 @@
+from unicodedata import name
 from django.urls import path, include
-from rest_framework import routers, urlpatterns
-from .import views
+from .views import RegisterApi, LoginApi, MainUser
+from knox import views as knox_views
 
-router = routers.DefaultRouter()
-router.register(r'users', views.UserRecordView)
 urlpatterns = [
-    path('', include(router.urls)),
-    path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+    path('api/register/', RegisterApi.as_view(), name='register'),
+    path('api/login/', LoginApi.as_view(), name='login'),
+    path('api/logout', knox_views.LogoutView.as_view(), name='logout'),
+    path('api/auth/user/', MainUser.as_view()),
+    path('api/logoutall/', knox_views.LogoutAllView.as_view(), name='logoutall'),
 ]
